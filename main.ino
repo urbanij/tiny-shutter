@@ -14,7 +14,7 @@
 #define HALT		1
 
 const int LED_PIN = 2;    /* LED hooked up on GPIO 2 */
-const int SHOOTING_TIME = 300;  // ms. the time that the shutter button is being pressed.
+const int SHOOTING_TIME = 500;  // ms. the time that the shutter button is being pressed.
                                 // in that time the camera needs to focus and shoot. 
 
 WiFiServer server(80);
