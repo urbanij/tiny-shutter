@@ -6,7 +6,7 @@
 
 #include <ESP8266WiFi.h>
 const int LED_PIN = 2;    /* LED hooked up on GPIO 2 */
-const int SHOOTING_TIME = 200;  // ms. the time that the shutter button is being pressed.
+const int SHOOTING_TIME = 300;  // ms. the time that the shutter button is being pressed.
                                 // in that time the camera needs to focus and shoot. 
 
 WiFiServer server(80);
@@ -44,32 +44,40 @@ void loop() {
   else if (req.indexOf("/burst") != -1)
     val = 4;
   /* Otherwise the request is invalid. */
+  else {
+  	val = 1;
+  }
 
   switch (val) {
     case 0: // shoot
       digitalWrite(LED_PIN, 0);
       delay(SHOOTING_TIME);
+      digitalWrite(LED_PIN, 1);
       break;
     case 1:	// off
     	digitalWrite(LED_PIN, 1);
     	break;
     case 2: // intervallometer
-      digitalWrite(LED_PIN, 1);
+    				// configure an interrupt to make it work.
+      while (1)
+      {
+      	digitalWrite(LED_PIN, 0);
+      	delay(SHOOTING_TIME);
+      	digitalWrite(LED_PIN, 1);
+      	delay(5000);	// ms
+      }
       break;
-
     case 3: // delayed_shoot (2 seconds)
       delay(2000);
       digitalWrite(LED_PIN, 0);
       delay(SHOOTING_TIME); // ? is it enough?
       // digitalWrite(LED_PIN, 1);
       break;
-
     case 4: // burst
       digitalWrite(LED_PIN, 0);
       delay(3000);
       // digitalWrite(LED_PIN, 1);
       break;
-
     default:
       digitalWrite(LED_PIN, 1);
   }
@@ -79,15 +87,16 @@ void loop() {
   // Prepare the response. Start with the common header and change the rest according to the request:
   String s = "HTTP/1.1 200 OK\r\n";
   s += "Content-Type: text/html\r\n\r\n";
-  s += "<!DOCTYPE HTML>\r\n<html>\r\n";
+  s += "<!DOCTYPE HTML>\r\n";
+  s += "<html>\r\n";
 
   /* adds some css-styling */
   s += "<head>" ;
 	s += "<style>" ;
 	// s += "body {background-color: powderblue;}" ;
-	s += "h1 { color: blue; }";
+	s += "h1 { color: red; text-align: center; }";
 	s += "p { color: red; }";
-	s += ".button { background-color: #4CAF50; /*green*/ border: none; color: white; padding: 15px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; }";
+	s += "button { box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19); width: 100%; background-color: #4CAF50; /*green*/ border: none; color: white; padding: 15px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; }";
 	s += "</style>";
 	s += "</head>";
 	/* end styling */
@@ -99,6 +108,7 @@ void loop() {
     s += "<p><a href=\"/intervallometer\"><button>intervallometer</button></a>&nbsp</p>";
     s += "<p><a href=\"/d-shoot\"><button>delayed shoot</button></a>&nbsp</p>";
     s += "<p><a href=\"/burst\"><button>burst</button></a>&nbsp</p>";
+    s += "<p><a href=\"/off\"><button>off</button></a>&nbsp</p>";
     val = 1;
   }
   else if(val == 1){  /* off */ 
@@ -106,6 +116,7 @@ void loop() {
     s += "<p><a href=\"/intervallometer\"><button>intervallometer</button></a>&nbsp</p>";
     s += "<p><a href=\"/d-shoot\"><button>delayed shoot</button></a>&nbsp</p>";
     s += "<p><a href=\"/burst\"><button>burst</button></a>&nbsp</p>";
+    s += "<p><a href=\"/off\"><button>off</button></a>&nbsp</p>";
     val = 1;
   }
   else if(val == 2){  /* intervallometer */
@@ -113,6 +124,7 @@ void loop() {
     s += "<p><a href=\"/intervallometer\"><button>intervallometer</button></a>&nbsp</p>";
     s += "<p><a href=\"/d-shoot\"><button>delayed shoot</button></a>&nbsp</p>";
     s += "<p><a href=\"/burst\"><button>burst</button></a>&nbsp</p>";
+    s += "<p><a href=\"/off\"><button>off</button></a>&nbsp</p>";
     val = 1;
   }
   else if(val == 3){  /* delayed shoot */
@@ -120,6 +132,7 @@ void loop() {
     s += "<p><a href=\"/intervallometer\"><button>intervallometer</button></a>&nbsp</p>";
     s += "<p><a href=\"/d-shoot\"><button>delayed shoot</button></a>&nbsp</p>";
     s += "<p><a href=\"/burst\"><button>burst</button></a>&nbsp</p>";
+    s += "<p><a href=\"/off\"><button>off</button></a>&nbsp</p>";
     val = 1;
   }
   else if(val == 4){  /* burst */
@@ -127,14 +140,15 @@ void loop() {
     s += "<p><a href=\"/intervallometer\"><button>intervallometer</button></a>&nbsp</p>";
     s += "<p><a href=\"/d-shoot\"><button>delayed shoot</button></a>&nbsp</p>";
     s += "<p><a href=\"/burst\"><button>burst</button></a>&nbsp</p>";
+    s += "<p><a href=\"/off\"><button>off</button></a>&nbsp</p>";
     val = 1;
   }
   else {  /* off */
-    // s += "<p>LED <a href=\"/off\"><button>ON</button></a>&nbsp;</p>";
     s += "<p><a href=\"/shoot\"><button>shoot</button></a>&nbsp</p>";
     s += "<p><a href=\"/intervallometer\"><button>intervallometer</button></a>&nbsp</p>";
     s += "<p><a href=\"/d-shoot\"><button>delayed shoot</button></a>&nbsp</p>";
     s += "<p><a href=\"/burst\"><button>burst</button></a>&nbsp</p>";
+    s += "<a href=\"/off\"><button>off</button></a>";
     val = 0;
   }
   s += "</html>\n";		/* close HTML page */
