@@ -5,6 +5,14 @@
  */
 
 #include <ESP8266WiFi.h>
+
+/* define of commands used to trigger the shutter. 
+ * depending on whether I use the optocoupler or I connect the camera directly to GPIO2, these two needs to be swapped.
+ */
+#define TRIGGER 0		/* TRIGGER = 0, shoot occurs if GPIO2 is attached to the camera. */
+										/* TRIGGER = 1, shoot occurs if the optocoupler is involved. */
+#define HALT		1
+
 const int LED_PIN = 2;    /* LED hooked up on GPIO 2 */
 const int SHOOTING_TIME = 300;  // ms. the time that the shutter button is being pressed.
                                 // in that time the camera needs to focus and shoot. 
@@ -50,36 +58,30 @@ void loop() {
 
   switch (val) {
     case 0: // shoot
-      digitalWrite(LED_PIN, 0);
+      digitalWrite(LED_PIN, TRIGGER);
       delay(SHOOTING_TIME);
-      digitalWrite(LED_PIN, 1);
+      digitalWrite(LED_PIN, HALT);
       break;
     case 1:	// off
-    	digitalWrite(LED_PIN, 1);
+    	digitalWrite(LED_PIN, HALT);
     	break;
     case 2: // intervallometer
     				// configure an interrupt to make it work.
-      while (1)
-      {
-      	digitalWrite(LED_PIN, 0);
-      	delay(SHOOTING_TIME);
-      	digitalWrite(LED_PIN, 1);
-      	delay(5000);	// ms
-      }
+      attachInterrupt(val=2, intervallometerISR, CHANGE);
       break;
     case 3: // delayed_shoot (2 seconds)
       delay(2000);
-      digitalWrite(LED_PIN, 0);
+      digitalWrite(LED_PIN, TRIGGER);
       delay(SHOOTING_TIME); // ? is it enough?
-      // digitalWrite(LED_PIN, 1);
+      digitalWrite(LED_PIN, HALT);
       break;
     case 4: // burst
-      digitalWrite(LED_PIN, 0);
+      digitalWrite(LED_PIN, TRIGGER);
       delay(3000);
       // digitalWrite(LED_PIN, 1);
       break;
     default:
-      digitalWrite(LED_PIN, 1);
+      digitalWrite(LED_PIN, HALT);
   }
 
   client.flush();
@@ -95,7 +97,7 @@ void loop() {
 	s += "<style>" ;
 	// s += "body {background-color: powderblue;}" ;
 	s += "h1 { color: red; text-align: center; }";
-	s += "p { color: red; }";
+	// s += "p { color: red; }";
 	s += "button { box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19); width: 100%; background-color: #4CAF50; /*green*/ border: none; color: white; padding: 15px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; }";
 	s += "</style>";
 	s += "</head>";
@@ -104,50 +106,50 @@ void loop() {
   s += "<h1>Camera remote</h1>";
 
   if(val == 0){ /* single shoot */
-    s += "<p><a href=\"/shoot\"><button>shoot</button></a>&nbsp</p>";
-    s += "<p><a href=\"/intervallometer\"><button>intervallometer</button></a>&nbsp</p>";
-    s += "<p><a href=\"/d-shoot\"><button>delayed shoot</button></a>&nbsp</p>";
-    s += "<p><a href=\"/burst\"><button>burst</button></a>&nbsp</p>";
-    s += "<p><a href=\"/off\"><button>off</button></a>&nbsp</p>";
+    s += "<a href=\"/shoot\"><button>shoot</button></a>";
+    s += "<a href=\"/intervallometer\"><button>intervallometer</button></a>";
+    s += "<a href=\"/d-shoot\"><button>delayed shoot</button></a>";
+    s += "<a href=\"/burst\"><button>burst</button></a>";
+    s += "<a href=\"/off\"><button>off</button></a>";
     val = 1;
   }
   else if(val == 1){  /* off */ 
-    s += "<p><a href=\"/shoot\"><button>shoot</button></a>&nbsp</p>";
-    s += "<p><a href=\"/intervallometer\"><button>intervallometer</button></a>&nbsp</p>";
-    s += "<p><a href=\"/d-shoot\"><button>delayed shoot</button></a>&nbsp</p>";
-    s += "<p><a href=\"/burst\"><button>burst</button></a>&nbsp</p>";
-    s += "<p><a href=\"/off\"><button>off</button></a>&nbsp</p>";
+    s += "<a href=\"/shoot\"><button>shoot</button></a>";
+    s += "<a href=\"/intervallometer\"><button>intervallometer</button></a>";
+    s += "<a href=\"/d-shoot\"><button>delayed shoot</button></a>";
+    s += "<a href=\"/burst\"><button>burst</button></a>";
+    s += "<a href=\"/off\"><button>off</button></a>";
     val = 1;
   }
   else if(val == 2){  /* intervallometer */
-    s += "<p><a href=\"/shoot\"><button>shoot</button></a>&nbsp</p>";
-    s += "<p><a href=\"/intervallometer\"><button>intervallometer</button></a>&nbsp</p>";
-    s += "<p><a href=\"/d-shoot\"><button>delayed shoot</button></a>&nbsp</p>";
-    s += "<p><a href=\"/burst\"><button>burst</button></a>&nbsp</p>";
-    s += "<p><a href=\"/off\"><button>off</button></a>&nbsp</p>";
+    s += "<a href=\"/shoot\"><button>shoot</button></a>";
+    s += "<a href=\"/intervallometer\"><button>intervallometer</button></a>";
+    s += "<a href=\"/d-shoot\"><button>delayed shoot</button></a>";
+    s += "<a href=\"/burst\"><button>burst</button></a>";
+    s += "<a href=\"/off\"><button>off</button></a>";
     val = 1;
   }
   else if(val == 3){  /* delayed shoot */
-    s += "<p><a href=\"/shoot\"><button>shoot</button></a>&nbsp</p>";
-    s += "<p><a href=\"/intervallometer\"><button>intervallometer</button></a>&nbsp</p>";
-    s += "<p><a href=\"/d-shoot\"><button>delayed shoot</button></a>&nbsp</p>";
-    s += "<p><a href=\"/burst\"><button>burst</button></a>&nbsp</p>";
-    s += "<p><a href=\"/off\"><button>off</button></a>&nbsp</p>";
+    s += "<a href=\"/shoot\"><button>shoot</button></a>";
+    s += "<a href=\"/intervallometer\"><button>intervallometer</button></a>";
+    s += "<a href=\"/d-shoot\"><button>delayed shoot</button></a>";
+    s += "<a href=\"/burst\"><button>burst</button></a>";
+    s += "<a href=\"/off\"><button>off</button></a>";
     val = 1;
   }
   else if(val == 4){  /* burst */
-    s += "<p><a href=\"/shoot\"><button>shoot</button></a>&nbsp</p>";
-    s += "<p><a href=\"/intervallometer\"><button>intervallometer</button></a>&nbsp</p>";
-    s += "<p><a href=\"/d-shoot\"><button>delayed shoot</button></a>&nbsp</p>";
-    s += "<p><a href=\"/burst\"><button>burst</button></a>&nbsp</p>";
-    s += "<p><a href=\"/off\"><button>off</button></a>&nbsp</p>";
+    s += "<a href=\"/shoot\"><button>shoot</button></a>";
+    s += "<a href=\"/intervallometer\"><button>intervallometer</button></a>";
+    s += "<a href=\"/d-shoot\"><button>delayed shoot</button></a>";
+    s += "<a href=\"/burst\"><button>burst</button></a>";
+    s += "<a href=\"/off\"><button>off</button></a>";
     val = 1;
   }
   else {  /* off */
-    s += "<p><a href=\"/shoot\"><button>shoot</button></a>&nbsp</p>";
-    s += "<p><a href=\"/intervallometer\"><button>intervallometer</button></a>&nbsp</p>";
-    s += "<p><a href=\"/d-shoot\"><button>delayed shoot</button></a>&nbsp</p>";
-    s += "<p><a href=\"/burst\"><button>burst</button></a>&nbsp</p>";
+    s += "<a href=\"/shoot\"><button>shoot</button></a>";
+    s += "<a href=\"/intervallometer\"><button>intervallometer</button></a>";
+    s += "<a href=\"/d-shoot\"><button>delayed shoot</button></a>";
+    s += "<a href=\"/burst\"><button>burst</button></a>";
     s += "<a href=\"/off\"><button>off</button></a>";
     val = 0;
   }
@@ -162,13 +164,28 @@ void loop() {
 
 void setupWiFi() {
   WiFi.mode(WIFI_AP);		/* configure esp8266 as access point */
-  const char AP_NameChar[]	= "fuckingwificameraconnection";    /* AP id */
-  const char WiFiAPPSK[]		= "sparkfun.@2+1";				          /* AP password */
+  const char AP_NameChar[]	= "AP_Name";			/* AP id */
+  const char WiFiAPPSK[]		= "AP_Pass";			/* AP password */
   WiFi.softAP(AP_NameChar, WiFiAPPSK);
 }
 
 void initHardware() {
   // Serial.begin(115200);
   pinMode(LED_PIN, OUTPUT);
-  digitalWrite(LED_PIN, HIGH);  // default value high, does not start shooting on startup.
+  digitalWrite(LED_PIN, HALT);  // default value high, does not start shooting on startup.
 }
+
+void intervallometerISR(){
+	while (1)
+  {
+  	// digitalWrite(LED_PIN, TRIGGER);
+  	// delay(SHOOTING_TIME);
+  	// digitalWrite(LED_PIN, HALT);
+  	// delay(5000);	// ms
+    static int state = 0;
+    state = !state;
+    digitalWrite(LED_PIN, state);
+    delay(2000);
+  }
+}
+
