@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<style>
+			h1 { 
+				font-family: arial;
+				color: blue; 
+				text-align: center;
+				font-size: 50px;
+			}
+			button {
+				font-family: arial;
+				box-shadow: 0 12px 36px 0 rgba(0,0,0,0.24), 0 20px 50px 0 rgba(0,0,0,0.19); 
+				width: 100%;
+				height: 110px;	/* height of a single button*/
+				border: none; 
+				color: white; 
+				padding: 10px; 
+				text-align: center; 
+				text-decoration: none; 
+				display: inline-block; 
+				font-size: 30px;
+				background-color: #00DD00;
+			}
+			#offButton {
+				background-color: red; 
+			}
+			#shootButton {
+				background-color: #00AA00; 
+			}
+		</style>
+	</head>
+
+	<h1>Camera remote</h1>
+	<body>
+		<p><a href='/shoot'><button id='shootButton'>SINGLE SHOOT</button></a></p>
+		<p><a href='/delshoot'><button>DELAYED SHOOT</button></a></p>
+		<p><a href='/burst'><button>BURST</button></a></p>
+		<p><a href='/inter'><button>INTERVALLOMETER</button></a></p>
+		<p><a href='/off'><button id='offButton'>OFF</button></a></p>
+	</body>
+
+</html>
