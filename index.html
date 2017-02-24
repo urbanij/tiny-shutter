@@ -1,7 +1,8 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
+<html lang='en-us'>
 
-<html>
 	<head>
+	<meta name='viewport' content='width=device-width, initial-scale=1.0'>
 		<style>
 			h1 { 
 				font-family: arial;
@@ -13,32 +14,35 @@
 				font-family: arial;
 				box-shadow: 0 12px 36px 0 rgba(0,0,0,0.24), 0 20px 50px 0 rgba(0,0,0,0.19); 
 				width: 100%;
-				height: 220px;	/* height of a single button*/
+				height: 87.2px;	/* height of a single button*/
 				border: none; 
 				color: white; 
-				padding: 10px; 
 				text-align: center; 
 				text-decoration: none; 
 				display: inline-block; 
 				font-size: 30px;
-				background-color: #00DD00;
+				background-color: #3b02ff;
+			}
+			#shootButton {
+				background-color: #0a0aae; 
+			}
+			#intervallometerButton {
+				background-color: #3fc5ff;
 			}
 			#offButton {
 				background-color: red; 
 			}
-			#shootButton {
-				background-color: #00AA00; 
-			}
 		</style>
 	</head>
 
-	<h1>Camera remote</h1>
+	<!-- <h1>Camera remote</h1> -->
 	<body>
-		<p><a href='/shoot'><button id='shootButton'>SINGLE SHOOT</button></a></p>
-		<p><a href='/delshoot'><button>DELAYED SHOOT</button></a></p>
-		<p><a href='/burst'><button>BURST</button></a></p>
-		<p><a href='/inter'><button>INTERVALLOMETER</button></a></p>
-		<p><a href='/off'><button id='offButton'>OFF</button></a></p>
+		<p><a href='/shoot''><button id='shootButton'>SINGLE SHOOT</button></a></p>		<!-- index.html -->
+		<p><a href='/delshoot'><button>DELAYED SHOOT</button></a></p>		<!-- index.html -->
+		<p><a href='/burst'><button>BURST</button></a></p>		<!-- index.html -->
+		<p><a href='/delburst'><button>DELAYED BURST</button></a></p>		<!-- index.html -->
+		<p><a href='/interv'><button id='intervallometerButton'>INTERVALLOMETER</button></a></p>		<!-- interv.html -->
+		<!-- <p><a href=index.html><button id='offButton'>OFF</button></a></p> -->
 	</body>
 
 </html>
