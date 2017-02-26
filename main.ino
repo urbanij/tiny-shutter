@@ -13,9 +13,13 @@
                     /* TRIGGER = 1, shoot occurs if the optocoupler is involved. */
 #define HALT    0
 
-const int LED_PIN = 2;    /* LED hooked up on GPIO 2 */
-const int SHOOTING_TIME = 600;   // ms. the time that the shutter button is being pressed.
-                                  // in that time the camera needs to focus and shoot. 
+#define INDEX " <!DOCTYPE html> <html lang='en-us'> <head> <meta name='viewport' content='width=device-width, initial-scale=1.0'> <style> h1 { font-family: arial; color: blue; text-align: center; font-size: 20px; } button { font-family: arial; box-shadow: 0 12px 36px 0 rgba(0,0,0,0.24), 0 20px 50px 0 rgba(0,0,0,0.19); width: 100%; height: 80px; /* height of a single button*/ border: none; color: #d8d8d8; text-align: center; font-size: 30px; background-color: #3b02ff; } #shootButton { background-color: #0a0aae; } #intervallometerButton { background-color: #3fc5ff; } </style> </head> <!-- <h1>Camera remote</h1> --> <body> <p><a href='/shoot'><button id='shootButton'>SINGLE SHOOT</button></a></p> <!-- /shoot --> <!-- index.html --> <p><a href='/delshoot'><button>DELAYED SHOOT</button></a></p> <!-- /delshoot --> <!-- index.html --> <p><a href='/burst'><button>BURST</button></a></p> <!-- /burst --> <!-- index.html --> <p><a href='/delburst'><button>DELAYED BURST</button></a></p> <!-- /delburst --> <!-- index.html --> <p><a href='/interv'><button id='intervallometerButton'>INTERVALLOMETER</button></a></p> <!-- /interv --> <!-- innterv.html --> </body> </html>  "
+#define INTERV " <!DOCTYPE html> <html lang='en-us'> <head> <meta name='viewport' content='width=device-width, initial-scale=1.0'> <style> h1 { font-family: arial; color: #ff0000; text-align: center; font-size: 20px; } button { font-family: arial; box-shadow: 0 12px 36px 0 rgba(0,0,0,0.24), 0 20px 50px 0 rgba(0,0,0,0.19); width: 100%; height: 464px; /* result of (height of a button)*(number of buttons)+(default button distance)*(number of distances) */ /* 80 * 5 + 16 * 4 */ border: none; color: #d8d8d8; text-align: center; font-size: 80px; background-color: #00DD00; } #offButton { background-color: #ff0000; } </style> </head> <!-- <h1>Camera remote</h1> --> <body> <p><a href='/off'><button id='offButton'>OFF</button></a></p> <!-- /off --> <!-- index.html --> </body> </html>  "
+
+const int LED_PIN = 0;    /* LED hooked up on GPIO 0 */
+const int SHOOTING_TIME = 600;  // ms. the time that the shutter button is being pressed.
+                                // in that time the camera needs to focus and shoot.
+const int INTERV_TIME = 5000-SHOOTING_TIME;
 
 WiFiServer server(80);
 void blinkLED();
@@ -64,7 +68,7 @@ void loop() {
   switch (val) {
     case 0: // shoot
       /* index.html */
-      s += "<!DOCTYPE html> <html lang='en-us'> <head> <meta name='viewport' content='width=device-width, initial-scale=1.0'> <style> h1 { font-family: arial; color: blue; text-align: center; font-size: 20px; } button { font-family: arial; box-shadow: 0 12px 36px 0 rgba(0,0,0,0.24), 0 20px 50px 0 rgba(0,0,0,0.19); width: 100%; height: 87.2px; /* height of a single button*/ border: none; color: white; text-align: center; text-decoration: none; display: inline-block; font-size: 30px; background-color: #3b02ff; } #shootButton { background-color: #0a0aae; } #intervallometerButton { background-color: #3fc5ff; } #offButton { background-color: red; } </style> </head> <!-- <h1>Camera remote</h1> --> <body> <p><a href='/shoot''><button id='shootButton'>SINGLE SHOOT</button></a></p> <!-- index.html --> <p><a href='/delshoot'><button>DELAYED SHOOT</button></a></p> <!-- index.html --> <p><a href='/burst'><button>BURST</button></a></p> <!-- index.html --> <p><a href='/delburst'><button>DELAYED BURST</button></a></p> <!-- index.html --> <p><a href='/interv'><button id='intervallometerButton'>INTERVALLOMETER</button></a></p> <!-- interv.html --> <!-- <p><a href=index.html><button id='offButton'>OFF</button></a></p> --> </body> </html> ";
+      s += INDEX;
       client.flush();
       client.print(s);
       val = 1;
@@ -72,7 +76,7 @@ void loop() {
       break;
     case 1: // off
       /* index.html */
-      s += " <!DOCTYPE html> <html lang='en-us'> <head> <meta name='viewport' content='width=device-width, initial-scale=1.0'> <style> h1 { font-family: arial; color: blue; text-align: center; font-size: 20px; } button { font-family: arial; box-shadow: 0 12px 36px 0 rgba(0,0,0,0.24), 0 20px 50px 0 rgba(0,0,0,0.19); width: 100%; height: 87.2px; /* height of a single button*/ border: none; color: white; text-align: center; text-decoration: none; display: inline-block; font-size: 30px; background-color: #3b02ff; } #shootButton { background-color: #0a0aae; } #intervallometerButton { background-color: #3fc5ff; } #offButton { background-color: red; } </style> </head> <!-- <h1>Camera remote</h1> --> <body> <p><a href='/shoot''><button id='shootButton'>SINGLE SHOOT</button></a></p> <!-- index.html --> <p><a href='/delshoot'><button>DELAYED SHOOT</button></a></p> <!-- index.html --> <p><a href='/burst'><button>BURST</button></a></p> <!-- index.html --> <p><a href='/delburst'><button>DELAYED BURST</button></a></p> <!-- index.html --> <p><a href='/interv'><button id='intervallometerButton'>INTERVALLOMETER</button></a></p> <!-- interv.html --> <!-- <p><a href=index.html><button id='offButton'>OFF</button></a></p> --> </body> </html>  ";
+      s += INDEX;
       client.flush();
       client.print(s);
       val = 1;
@@ -80,7 +84,7 @@ void loop() {
       break;
     case 2: // intervallometer
       /* interv.html */
-      s += " <!DOCTYPE html> <html lang='en-us'> <head> <meta name='viewport' content='width=device-width, initial-scale=1.0'> <style> h1 { font-family: arial; color: #ff0000; text-align: center; font-size: 20px; } button { font-family: arial; box-shadow: 0 12px 36px 0 rgba(0,0,0,0.24), 0 20px 50px 0 rgba(0,0,0,0.19); width: 100%; height: 500px; /* result of (height of a button)*(number of buttons)+(default button distance)*(number of distances) */ /* 87.2 * 5 + 16 * 4 */ border: none; color: white; text-align: center; text-decoration: none; display: inline-block; font-size: 80px; background-color: #00DD00; } #offButton { background-color: #ff0000; } #shootButton { background-color: #00AA00; } </style> </head> <!-- <h1>Camera remote</h1> --> <body> <p><a href='/off'><button id='offButton'>OFF</button></a></p> <!-- index.html --> </body> </html> ";
+      s += INTERV;
       client.flush();
       client.print(s);
       repeatIntervallometer:
@@ -88,7 +92,7 @@ void loop() {
       break;
     case 3: // delayed_shoot
       /* index.html */
-      s += " <!DOCTYPE html> <html lang='en-us'> <head> <meta name='viewport' content='width=device-width, initial-scale=1.0'> <style> h1 { font-family: arial; color: blue; text-align: center; font-size: 20px; } button { font-family: arial; box-shadow: 0 12px 36px 0 rgba(0,0,0,0.24), 0 20px 50px 0 rgba(0,0,0,0.19); width: 100%; height: 87.2px; /* height of a single button*/ border: none; color: white; text-align: center; text-decoration: none; display: inline-block; font-size: 30px; background-color: #3b02ff; } #shootButton { background-color: #0a0aae; } #intervallometerButton { background-color: #3fc5ff; } #offButton { background-color: red; } </style> </head> <!-- <h1>Camera remote</h1> --> <body> <p><a href='/shoot''><button id='shootButton'>SINGLE SHOOT</button></a></p> <!-- index.html --> <p><a href='/delshoot'><button>DELAYED SHOOT</button></a></p> <!-- index.html --> <p><a href='/burst'><button>BURST</button></a></p> <!-- index.html --> <p><a href='/delburst'><button>DELAYED BURST</button></a></p> <!-- index.html --> <p><a href='/interv'><button id='intervallometerButton'>INTERVALLOMETER</button></a></p> <!-- interv.html --> <!-- <p><a href=index.html><button id='offButton'>OFF</button></a></p> --> </body> </html> ";
+      s += INDEX;
       client.flush();
       client.print(s);
       val = 1;
@@ -98,7 +102,7 @@ void loop() {
       break;
     case 4: // burst. Warning: the camera needs to be set on burst mode too!
       /* index.html */
-      s += " <!DOCTYPE html> <html lang='en-us'> <head> <meta name='viewport' content='width=device-width, initial-scale=1.0'> <style> h1 { font-family: arial; color: blue; text-align: center; font-size: 20px; } button { font-family: arial; box-shadow: 0 12px 36px 0 rgba(0,0,0,0.24), 0 20px 50px 0 rgba(0,0,0,0.19); width: 100%; height: 87.2px; /* height of a single button*/ border: none; color: white; text-align: center; text-decoration: none; display: inline-block; font-size: 30px; background-color: #3b02ff; } #shootButton { background-color: #0a0aae; } #intervallometerButton { background-color: #3fc5ff; } #offButton { background-color: red; } </style> </head> <!-- <h1>Camera remote</h1> --> <body> <p><a href='/shoot''><button id='shootButton'>SINGLE SHOOT</button></a></p> <!-- index.html --> <p><a href='/delshoot'><button>DELAYED SHOOT</button></a></p> <!-- index.html --> <p><a href='/burst'><button>BURST</button></a></p> <!-- index.html --> <p><a href='/delburst'><button>DELAYED BURST</button></a></p> <!-- index.html --> <p><a href='/interv'><button id='intervallometerButton'>INTERVALLOMETER</button></a></p> <!-- interv.html --> <!-- <p><a href=index.html><button id='offButton'>OFF</button></a></p> --> </body> </html> ";
+      s += INDEX;
       client.flush();
       client.print(s);
       val = 1;
@@ -108,7 +112,7 @@ void loop() {
       break;
     case 5: // delayed burst. Warning: the camera needs to be set on burst mode too!
       /* index.html */
-      s += " <!DOCTYPE html> <html lang='en-us'> <head> <meta name='viewport' content='width=device-width, initial-scale=1.0'> <style> h1 { font-family: arial; color: blue; text-align: center; font-size: 20px; } button { font-family: arial; box-shadow: 0 12px 36px 0 rgba(0,0,0,0.24), 0 20px 50px 0 rgba(0,0,0,0.19); width: 100%; height: 87.2px; /* height of a single button*/ border: none; color: white; text-align: center; text-decoration: none; display: inline-block; font-size: 30px; background-color: #3b02ff; } #shootButton { background-color: #0a0aae; } #intervallometerButton { background-color: #3fc5ff; } #offButton { background-color: red; } </style> </head> <!-- <h1>Camera remote</h1> --> <body> <p><a href='/shoot''><button id='shootButton'>SINGLE SHOOT</button></a></p> <!-- index.html --> <p><a href='/delshoot'><button>DELAYED SHOOT</button></a></p> <!-- index.html --> <p><a href='/burst'><button>BURST</button></a></p> <!-- index.html --> <p><a href='/delburst'><button>DELAYED BURST</button></a></p> <!-- index.html --> <p><a href='/interv'><button id='intervallometerButton'>INTERVALLOMETER</button></a></p> <!-- interv.html --> <!-- <p><a href=index.html><button id='offButton'>OFF</button></a></p> --> </body> </html> ";
+      s += INDEX;
       client.flush();
       client.print(s);
       val = 1;
@@ -118,7 +122,8 @@ void loop() {
       digitalWrite(LED_PIN, HALT);
       break;
     default:
-      s += " <!DOCTYPE html> <html lang='en-us'> <head> <meta name='viewport' content='width=device-width, initial-scale=1.0'> <style> h1 { font-family: arial; color: blue; text-align: center; font-size: 20px; } button { font-family: arial; box-shadow: 0 12px 36px 0 rgba(0,0,0,0.24), 0 20px 50px 0 rgba(0,0,0,0.19); width: 100%; height: 87.2px; /* height of a single button*/ border: none; color: white; text-align: center; text-decoration: none; display: inline-block; font-size: 30px; background-color: #3b02ff; } #shootButton { background-color: #0a0aae; } #intervallometerButton { background-color: #3fc5ff; } #offButton { background-color: red; } </style> </head> <!-- <h1>Camera remote</h1> --> <body> <p><a href='/shoot''><button id='shootButton'>SINGLE SHOOT</button></a></p> <!-- index.html --> <p><a href='/delshoot'><button>DELAYED SHOOT</button></a></p> <!-- index.html --> <p><a href='/burst'><button>BURST</button></a></p> <!-- index.html --> <p><a href='/delburst'><button>DELAYED BURST</button></a></p> <!-- index.html --> <p><a href='/interv'><button id='intervallometerButton'>INTERVALLOMETER</button></a></p> <!-- interv.html --> <!-- <p><a href=index.html><button id='offButton'>OFF</button></a></p> --> </body> </html> ";
+      /* index.html */
+      s += INDEX;
       client.flush();
       client.print(s);
       val = 1;
@@ -159,8 +164,7 @@ void intervallometer(){
     digitalWrite(LED_PIN, TRIGGER);
     delay(SHOOTING_TIME);
     digitalWrite(LED_PIN, HALT);
-    delay(5000);  // ms
+    delay(INTERV_TIME);
   }
   return;
 }
-
