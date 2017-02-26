@@ -138,8 +138,8 @@ void loop() {
 
 void setupWiFi() {
   WiFi.mode(WIFI_AP);   /* configure esp8266 as access point */
-  const char AP_NameChar[] = "tiny-shutter";
-  const char WiFiAPPSK[] = "423aky12";
+  const char AP_NameChar[] = "";
+  const char WiFiAPPSK[]   = "";
   WiFi.softAP(AP_NameChar, WiFiAPPSK);
 }
 
