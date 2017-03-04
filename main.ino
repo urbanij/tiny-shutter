@@ -19,7 +19,7 @@
 const int SHOOT_PIN = 0;    /* LED hooked up on GPIO 0 */
 const int SHOOTING_TIME = 600;  // ms. the time that the shutter button is being pressed.
                                 // in that time the camera needs to focus and shoot.
-const int INTERV_TIME = 5000-SHOOTING_TIME;
+const int INTERV_TIME = 5000-SHOOTING_TIME;   // intervallometer time = 5 seconds.
 
 WiFiServer server(80);
 void blinkLED();
