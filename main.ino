@@ -13,10 +13,10 @@
                     /* TRIGGER = 1, shoot occurs if the optocoupler is involved. */
 #define HALT    0
 
-#define INDEX " <!DOCTYPE html> <html lang='en-us'> <head> <meta name='viewport' content='width=device-width, initial-scale=1.0'> <style> h1 { font-family: arial; color: blue; text-align: center; font-size: 20px; } button { font-family: arial; box-shadow: 0 12px 36px 0 rgba(0,0,0,0.24), 0 20px 50px 0 rgba(0,0,0,0.19); width: 100%; height: 80px; /* height of a single button*/ border: none; color: #d8d8d8; text-align: center; font-size: 30px; background-color: #3b02ff; } #shootButton { background-color: #0a0aae; } #intervallometerButton { background-color: #3fc5ff; } </style> </head> <!-- <h1>Camera remote</h1> --> <body> <p><a href='/shoot'><button id='shootButton'>SINGLE SHOOT</button></a></p> <!-- /shoot --> <!-- index.html --> <p><a href='/delshoot'><button>DELAYED SHOOT</button></a></p> <!-- /delshoot --> <!-- index.html --> <p><a href='/burst'><button>BURST</button></a></p> <!-- /burst --> <!-- index.html --> <p><a href='/delburst'><button>DELAYED BURST</button></a></p> <!-- /delburst --> <!-- index.html --> <p><a href='/interv'><button id='intervallometerButton'>INTERVALLOMETER</button></a></p> <!-- /interv --> <!-- innterv.html --> </body> </html>  "
-#define INTERV " <!DOCTYPE html> <html lang='en-us'> <head> <meta name='viewport' content='width=device-width, initial-scale=1.0'> <style> h1 { font-family: arial; color: #ff0000; text-align: center; font-size: 20px; } button { font-family: arial; box-shadow: 0 12px 36px 0 rgba(0,0,0,0.24), 0 20px 50px 0 rgba(0,0,0,0.19); width: 100%; height: 464px; /* result of (height of a button)*(number of buttons)+(default button distance)*(number of distances) */ /* 80 * 5 + 16 * 4 */ border: none; color: #d8d8d8; text-align: center; font-size: 80px; background-color: #00DD00; } #offButton { background-color: #ff0000; } </style> </head> <!-- <h1>Camera remote</h1> --> <body> <p><a href='/off'><button id='offButton'>OFF</button></a></p> <!-- /off --> <!-- index.html --> </body> </html>  "
+#define INDEX  "<!DOCTYPE html> <head> <html lang='en'> <meta charset='UTF-8'> <meta name='viewport' content='width=device-width, initial-scale=1.0'/> <!-- <link rel='stylesheet' href='../style/about.css'> --> <link rel='icon' type='image/png' href='img/dslr_favicon.png'/> <title>Tiny shutter</title> <style> h1 { font-family: arial; color: blue; text-align: center; font-size: 20px; } button { font-family: arial; box-shadow: 0 12px 36px 0 rgba(0,0,0,0.24), 0 20px 50px 0 rgba(0,0,0,0.19); width: 100%; height: 80px; /* height of a single button*/ border: none; color: #d8d8d8; text-align: center; font-size: 30px; background-color: #3b02ff; } #shootButton { background-color: #0a0aae; } #intervallometerButton { background-color: #3fc5ff; } </style> </head> <!-- <h1>Camera remote</h1> --> <body> <p><a href=index.html><button id='shootButton'>SINGLE SHOOT</button></a></p> <!-- /shoot --> <!-- index.html --> <p><a href=index.html><button>DELAYED SHOOT</button></a></p> <!-- /delshoot --> <!-- index.html --> <p><a href=index.html><button>BURST</button></a></p> <!-- /burst --> <!-- index.html --> <p><a href=index.html><button>DELAYED BURST</button></a></p> <!-- /delburst --> <!-- index.html --> <p><a href=interv.html><button id='intervallometerButton'>INTERVALLOMETER</button></a></p> <!-- /interv --> <!-- innterv.html --> </body> </html> "
+#define INTERV "<!DOCTYPE html> <head> <html lang='en'> <meta charset='UTF-8'> <meta name='viewport' content='width=device-width, initial-scale=1.0'/> <!-- <link rel='stylesheet' href='../style/about.css'> --> <link rel='icon' type='image/png' href='img/dslr_favicon.png'/> <title>Tiny shutter</title> <style> h1 { font-family: arial; color: #ff0000; text-align: center; font-size: 20px; } button { font-family: arial; box-shadow: 0 12px 36px 0 rgba(0,0,0,0.24), 0 20px 50px 0 rgba(0,0,0,0.19); width: 100%; height: 464px; /* result of (height of a button)*(number of buttons)+(default button distance)*(number of distances) */ /* 80 * 5 + 16 * 4 */ border: none; color: #d8d8d8; text-align: center; font-size: 80px; background-color: #00DD00; } #offButton { background-color: #ff0000; } </style> </head> <!-- <h1>Camera remote</h1> --> <body> <p><a href=index.html><button id='offButton'>OFF</button></a></p> <!-- /off --> <!-- index.html --> </body> </html> "
 
-const int LED_PIN = 0;    /* LED hooked up on GPIO 0 */
+const int SHOOT_PIN = 0;    /* LED hooked up on GPIO 0 */
 const int SHOOTING_TIME = 600;  // ms. the time that the shutter button is being pressed.
                                 // in that time the camera needs to focus and shoot.
 const int INTERV_TIME = 5000-SHOOTING_TIME;
@@ -80,7 +80,7 @@ void loop() {
       client.flush();
       client.print(s);
       val = 1;
-      digitalWrite(LED_PIN, HALT);
+      digitalWrite(SHOOT_PIN, HALT);
       break;
     case 2: // intervallometer
       /* interv.html */
@@ -96,7 +96,7 @@ void loop() {
       client.flush();
       client.print(s);
       val = 1;
-      digitalWrite(LED_PIN, HALT);
+      digitalWrite(SHOOT_PIN, HALT);
       delay(2000);  /* ms of delay before shooting */
       shoot();
       break;
@@ -106,9 +106,9 @@ void loop() {
       client.flush();
       client.print(s);
       val = 1;
-      digitalWrite(LED_PIN, TRIGGER);
+      digitalWrite(SHOOT_PIN, TRIGGER);
       delay(3000);
-      digitalWrite(LED_PIN, HALT);
+      digitalWrite(SHOOT_PIN, HALT);
       break;
     case 5: // delayed burst. Warning: the camera needs to be set on burst mode too!
       /* index.html */
@@ -117,9 +117,9 @@ void loop() {
       client.print(s);
       val = 1;
       delay(2000);  // ms of delay before burst.
-      digitalWrite(LED_PIN, TRIGGER);
+      digitalWrite(SHOOT_PIN, TRIGGER);
       delay(3000);
-      digitalWrite(LED_PIN, HALT);
+      digitalWrite(SHOOT_PIN, HALT);
       break;
     default:
       /* index.html */
@@ -127,7 +127,7 @@ void loop() {
       client.flush();
       client.print(s);
       val = 1;
-      digitalWrite(LED_PIN, HALT);
+      digitalWrite(SHOOT_PIN, HALT);
   }
  
   // client.print(s); /* Send the response to the client */
@@ -145,25 +145,25 @@ void setupWiFi() {
 
 void initHardware() {
   // Serial.begin(115200);
-  pinMode(LED_PIN, OUTPUT);
-  digitalWrite(LED_PIN, HALT);
+  pinMode(SHOOT_PIN, OUTPUT);
+  digitalWrite(SHOOT_PIN, HALT);
   return;
 }
 
 void shoot(){
-	digitalWrite(LED_PIN, HALT);
-  digitalWrite(LED_PIN, TRIGGER);
+	digitalWrite(SHOOT_PIN, HALT);
+  digitalWrite(SHOOT_PIN, TRIGGER);
   delay(SHOOTING_TIME);
-  digitalWrite(LED_PIN, HALT);
+  digitalWrite(SHOOT_PIN, HALT);
   return;
 }
 
 void intervallometer(){
   while(1){
-    digitalWrite(LED_PIN, HALT);
-    digitalWrite(LED_PIN, TRIGGER);
+    digitalWrite(SHOOT_PIN, HALT);
+    digitalWrite(SHOOT_PIN, TRIGGER);
     delay(SHOOTING_TIME);
-    digitalWrite(LED_PIN, HALT);
+    digitalWrite(SHOOT_PIN, HALT);
     delay(INTERV_TIME);
   }
   return;
