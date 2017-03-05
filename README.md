@@ -7,8 +7,8 @@ non-wifi-connected camera the ability to shoot remotely, via Wi-Fi connection (a
 
 To see it in action:
 * upload `main.ino` onto the ESP8266. <sup>1</sup>
-* connect the device you intend to use as remote shutter (e.g. your smartphone) to the Wi-Fi retwork [AP_name].
-* open the browser and navigate to: `192.168.4.1` .
+* connect the device you intend to use as remote shutter (e.g. your smartphone) to the Wi-Fi network [AP_name].
+* open the browser and navigate to: `192.168.4.1`.
 * if no errors occur, you should be able to see [this](https://fu0x11.github.io/tiny-shutter/) interface. The connection is established and you are ready to shoot. :sunglasses:
 
 
