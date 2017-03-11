@@ -6,7 +6,7 @@ non-wifi-connectable DSLR the ability to shoot remotely, via Wi-Fi connection in
 [This](https://fu0x11.github.io/tiny-shutter/) is how the UI looks like on a whatsoever browser.
 
 ##### To see it in action:
-* set an *AP_name* and *AP_pass* of your choice [here](https://github.com/fu0x11/tiny-shutter/blob/master/main.ino#L141) and [here](https://github.com/fu0x11/tiny-shutter/blob/master/main.ino#L142) respectively.
+* set an *AP_name* and *AP_pass* of your choice [here](https://github.com/fu0x11/tiny-shutter/blob/master/main.ino#L143) and [here](https://github.com/fu0x11/tiny-shutter/blob/master/main.ino#L144) respectively.
 * upload `main.ino` onto the ESP8266. <sup>1</sup>
 * connect the device you intend to use as remote shutter (e.g. your smartphone) to the Wi-Fi network *AP_name*.
 * open the browser and navigate to: `192.168.4.1`.
