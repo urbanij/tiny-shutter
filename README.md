@@ -17,6 +17,7 @@ non Wi-Fi connectable DSLR the ability to shoot remotely, via Wi-Fi connection i
 
 <br/>
 <sup>1</sup> I used an [Arduino Uno](https://www.arduino.cc/en/main/ArduinoBoardUno) to accomplish that. Follow along [this](https://www.youtube.com/watch?v=P_ecAFpUADU) step-by-step guide in case of troubles.
+
 <br/>
 
 *fu*
