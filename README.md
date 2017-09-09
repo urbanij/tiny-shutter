@@ -1,10 +1,10 @@
-# Tiny shutter
+# Tiny shutter<sup>*</sup>
 
 A hardware device based on the ubiquitous [ESP8266](http://esp8266.net) Wi-Fi module intended to give a 
 non Wi-Fi enabled DSLR the possibility to shoot remotely, via Wi-Fi,  in access point mode.
 The device is supposed to be attached to the camera through a mini male jack connector-- the same way commercial devices do.
 
-[This](https://fu0x11.github.io/tiny-shutter/) is how the UI looks like on a whatsoever browser once everything is set up.
+[This](https://fu0x11.github.io/tiny-shutter/) is how the UI looks on a whatsoever browser once everything is set up.
 
 
 ### To see it in action:
@@ -14,10 +14,12 @@ The device is supposed to be attached to the camera through a mini male jack con
 * open the browser and navigate to: `192.168.4.1`.
 * if no errors occur, you should be able to see [this](https://fu0x11.github.io/tiny-shutter/) interface. The connection is now established and you are ready to shoot. :sunglasses:
 
+### Todo:
+* Schematic and pcb of the final device.
+* (Improve the code)
 
-<!-- [This]() is the schematic of the device. -->
 
-*/fu*
 
 ---------
+<sup>*</sup> This project is still work in progress.<br>
 <sup>(1)</sup> I used an [Arduino Uno](https://www.arduino.cc/en/main/ArduinoBoardUno) to accomplish that. Follow along [this](https://www.youtube.com/watch?v=P_ecAFpUADU) step-by-step guide in case of troubles.
